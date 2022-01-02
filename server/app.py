@@ -14,6 +14,7 @@ def getData():
         'weekAmounts': data[1],
         'yearIncomeOutcome': data[2],
         'salaries': data[3],
-        'amazonExpenses': data[4]
+        'amazonExpenses': data[4],
+        'outcomePerType': data[5]
     }
     return jsonify(response)

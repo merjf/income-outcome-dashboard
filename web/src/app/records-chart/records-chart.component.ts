@@ -39,12 +39,16 @@ export class RecordsChartComponent implements OnInit {
       let amazonOutcome = this.dataService.adjustValues(JSON.parse(this.data["amazonExpenses"]));
       let totSalaries = this.data["totSalaries"];
       let totAmazonExpenses = this.data["totAmazonExpenses"];
-      this.chartService.initChart([["Income", positiveAmounts], ["Outcome", negativeAmounts]], "#incomeOutcomeChart",
-        "Year Income/Outcome", undefined, 1, ["#0db824", "#fc0000"]);
-      this.chartService.initChart([["Salary", salaries]], "#salariesChart", "Salaries", totSalaries,
-        2, ["#0d39d9"]);
-      this.chartService.initChart([["Outcome", amazonOutcome]], "#amazonOutcomeChart", "Amazon Outcome", totAmazonExpenses,
-        3, ["#e79924"]);
+      this.chartService.initLineChart([["Income", positiveAmounts], ["Outcome", negativeAmounts]], "#incomeOutcomeChart",
+      "Year Income/Outcome", undefined, 1, ["#0db824", "#fc0000"]);
+      this.chartService.initLineChart([["Salary", salaries]], "#salariesChart", "Salaries", totSalaries,
+      2, ["#0d39d9"]);
+      this.chartService.initLineChart([["Outcome", amazonOutcome]], "#amazonOutcomeChart", "Amazon Outcome", totAmazonExpenses,
+      3, ["#e79924"]);
+      let outcomePerType = this.data["outcomePerType"];
+      let labels = Object.keys(outcomePerType);
+      let values = Object.keys(outcomePerType).map(function (key) { return Math.abs(outcomePerType[key].toFixed(2)); });
+      this.chartService.initPolarChart(values, "#outcomePerType", labels, 4, "Outcome Per Type");
     }
   }
 

@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
       response => {
         var generalValues = JSON.parse(response["generalValues"]);
         var yearIncomeOutcome = JSON.parse(response["yearIncomeOutcome"]);
+        var outcomePerType = JSON.parse(response["outcomePerType"]);
         this.period = [generalValues["firstDate"], generalValues["lastDate"]];
         this.data = {
           "positiveOperations": yearIncomeOutcome["positiveOperations"],
@@ -27,7 +28,8 @@ export class DashboardComponent implements OnInit {
           "salaries": response["salaries"],
           "amazonExpenses": response["amazonExpenses"],
           "totAmazonExpenses": generalValues["totAmazonExpenses"],
-          "totSalaries": generalValues["totSalaries"]
+          "totSalaries": generalValues["totSalaries"],
+          "outcomePerType": outcomePerType
         };
         this.values = [{
             "label": "Current Amount",

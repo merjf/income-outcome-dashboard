@@ -9,7 +9,7 @@ export class ChartService {
 
   constructor() { }
 
-  initChart(data: any[], chartId: string, title: string, titleData: number | undefined, id: number, colors: string[]){
+  initLineChart(data: any[], chartId: string, title: string, titleData: number | undefined, id: number, colors: string[]){
     var series: any = [];
     data.forEach(item => {
       series.push({
@@ -17,7 +17,7 @@ export class ChartService {
         data: item[1]
       });
     });
-    var optionsArea = {
+    var optionsChart = {
       chart: {
         type: "line",
         id: id,
@@ -43,7 +43,8 @@ export class ChartService {
         type: 'datetime'
       },
       tooltip: {
-        followCursor: true
+        followCursor: true,
+        theme: localStorage.getItem("theme")
       },
       fill: {
         opacity: 1,
@@ -62,19 +63,70 @@ export class ChartService {
     }
     var chartArea = new ApexCharts(
       document.querySelector(chartId),
-      optionsArea
+      optionsChart
+    );
+    chartArea.render();
+  }
+
+  initPolarChart(data: any[], chartId: string, labels: string[], id: number, title: string){
+    var optionsChart = {
+      series: data,
+        chart: {
+          width: 380,
+          type: 'polarArea',
+          id: id
+        },
+        labels: labels,
+        fill: {
+          opacity: 1
+        },
+        stroke: {
+          width: 1,
+          colors: undefined
+        },
+        yaxis: {
+          show: false
+        },
+        legend: {
+          position: 'bottom'
+        },
+        tooltip: {
+          followCursor: true,
+          theme: localStorage.getItem("theme")
+        },
+        plotOptions: {
+          polarArea: {
+            rings: {
+              strokeWidth: 0
+            }
+          }
+        },
+        theme: {
+          monochrome: {
+            shadeTo: 'light',
+            shadeIntensity: 0.6
+          }
+        }
+    };
+    console.log(document.querySelector(chartId));
+    var chartArea = new ApexCharts(
+      document.querySelector(chartId),
+      optionsChart
     );
     chartArea.render();
   }
 
   updateCharts(){
-    var chartIds : number[] = [1, 2, 3];
+    var chartIds : number[] = [1, 2, 3, 4];
     var foreColor = localStorage.getItem("theme") === "dark" ? "#FFFFFF" : "#000000";
     chartIds.forEach(chartId => {
       ApexCharts.exec(chartId + "", 'updateOptions', {
         chart: {
           foreColor: foreColor
-        }
+        },
+        tooltip: {
+          theme: localStorage.getItem("theme")
+        },
       });
     });
   }

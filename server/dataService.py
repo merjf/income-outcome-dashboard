@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.core.frame import DataFrame
 import numpy as np
 import json
 
@@ -23,7 +24,8 @@ def getData():
     yearIncomeOutcome = extractYearIncomeOutcome(dataFrame.copy())
     salaries = getSalary(dataFrame.copy())
     amazonExpenses = getAmazonExpenses(dataFrame.copy())
-    return [generalValues, weekAmounts.to_json(orient='records'), yearIncomeOutcome, salaries, amazonExpenses]
+    outcomePerType = extractOutcomePerType(dataFrame.copy())
+    return [generalValues, weekAmounts.to_json(orient='records'), yearIncomeOutcome, salaries, amazonExpenses, outcomePerType]
 
 def refineData(dataFrame):
     return dataFrame[~dataFrame['description'].str.contains("GIROFONDO")]
@@ -79,3 +81,31 @@ def extractAmazonExpenses(dataFrame):
     outcome = dataFrame.loc[dataFrame['operation'] < 0].sort_values(by="valueDate")
     outcome = outcome[outcome['description'].str.contains("(?i)amazon|AMZN", case=False)]
     return outcome.drop('description', 1)
+
+def extractOutcomePerType(dataFrame):
+    allOutcome = dataFrame.loc[dataFrame['operation'] < 0].sort_values(by="valueDate")
+    multimediaCosts = allOutcome[allOutcome['description'].str.contains("(?i)spotify|netflix|disney|iliad|fastweb|wind|telecom", case=False)]["operation"].sum()
+    fixedCosts = allOutcome[allOutcome['description'].str.contains("(?i)picicuto|parking|nicita", case=False)]["operation"].sum()
+    gasolioCosts = allOutcome[allOutcome['description'].str.contains("(?i)esso|petrol|eni|stazione|distributore|tamoil", case=False)]["operation"].sum()
+    marketCosts = allOutcome[allOutcome['description'].str.contains("(?i)conad|crai|mercat|kasanova|lidl|esselunga|iper|penny|auchan|deco|eurospin|linda|discount", case=False)]["operation"].sum()
+    diningOut = allOutcome[allOutcome['description'].str.contains("(?i)scuderi|burger|borgo|canusciuti|tortellino|risto|food|gelsobianco|terrazza|trattori|spinella|panin", case=False)]["operation"].sum()
+    drinkingOut = allOutcome[allOutcome['description'].str.contains("(?i)mono|ma..si|bar|caff|cafe|gammazita|club|lido|highlander|vermut|amorelli", case=False)]["operation"].sum()
+    clothesCosts = allOutcome[allOutcome['description'].str.contains("(?i)jones|north|decathlon|looker|scout|celio|coin|zalando|sarto|calzedonia", case=False)]["operation"].sum()
+    gamesCosts = allOutcome[allOutcome['description'].str.contains("(?i)steam|league|riot", case=False)]["operation"].sum()
+    vehicleCosts = allOutcome[allOutcome['description'].str.contains("(?i)crimi|pedaggio|assicurazione|pneumatici", case=False)]["operation"].sum()
+    cash = allOutcome[allOutcome['description'].str.contains("(?i)prelievo", case=False)]["operation"].sum()
+    findomestic = allOutcome[allOutcome['description'].str.contains("(?i)findomestic", case=False)]["operation"].sum()
+    #ohterCosts = allOutcome[allOutcome['description'].str.contains("(?i)", case=False)]
+    return json.dumps({
+        'multimediaCosts': multimediaCosts,
+        'fixedCosts': fixedCosts,
+        'gasolioCosts': gasolioCosts,
+        'marketCosts': marketCosts,
+        'diningOut': diningOut,
+        'drinkingOut': drinkingOut,
+        'clothesCosts': clothesCosts,
+        'gamesCosts': gamesCosts,
+        'vehicleCosts': vehicleCosts,
+        'cash': cash,
+        'findomestic': findomestic
+    })

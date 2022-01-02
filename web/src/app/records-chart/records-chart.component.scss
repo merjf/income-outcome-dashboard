@@ -1,8 +1,10 @@
 .chart-list{
+    .chart-group{
+        display: flex;
+        justify-content: space-between;
+    }
     .box {
         max-width: 600px;
-        //background-color: #2B2D3E;
-        display: flex;
         margin: 50px auto;
     }
     .box.dark{
