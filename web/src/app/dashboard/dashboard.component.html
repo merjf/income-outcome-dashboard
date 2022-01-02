@@ -1,0 +1,29 @@
+<div>
+  <section>
+    <h1>Overview</h1>
+    <mat-card class="overview-card" [ngClass]="{'dark' : isDark()}">
+      <mat-card-subtitle *ngIf="period !== []">
+        Period: <br>
+        {{ period[0] }} - {{ period[1] }}
+      </mat-card-subtitle>
+      <mat-card-content>
+        <mat-list-item *ngFor="let item of values">
+          <mat-list-item>
+            <div>
+              <span>
+                {{ item.label }}: &nbsp;
+              </span>
+              <span [ngClass]="{'value-positive' : item.value > 0, 'value-negative' : item.value < 0}">
+                {{ item.value|currency:'EUR':true }}
+              </span>
+            </div>
+          </mat-list-item>
+        </mat-list-item>
+      </mat-card-content>
+    </mat-card>
+  </section>
+  <section>
+    <records-chart [data]="data">
+    </records-chart>
+  </section>
+</div>

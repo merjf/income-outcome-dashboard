@@ -1,0 +1,16 @@
+<div class="app-core" [ngClass]="{'light': getTheme() === 'light', 'dark': getTheme() === 'dark'}">
+  <header>
+    <h1>Dashboard</h1>
+    <mat-icon class="theme-mode" aria-hidden="false" (click)="changeTheme()">
+      {{ themeIcon }}
+    </mat-icon>
+  </header>
+  <main>
+    <dashboard></dashboard>
+  </main>
+  <footer>
+    <span>
+      Powered with &#10084; by Merjf 
+    </span>
+  </footer>
+</div>

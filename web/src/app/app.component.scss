@@ -1,0 +1,54 @@
+.app-core.dark{
+    background-color: #1c1c1c;
+    color: white;
+    .overview-card{
+        background-color: #1f1f1f !important;
+        color: white !important;
+        .mat-card-subtitle{
+            color: white;
+        }
+    }
+    footer{
+        background-color: white;
+        color: #1c1c1c;
+    }
+}
+.app-core{
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    header{
+        height: 100px;
+        h1{
+            margin: auto;
+            font-size: 38px;
+        }
+        .theme-mode{
+            position: absolute;
+            right: 40px;
+            top: 40px;
+        }
+    }
+    main {
+        flex: auto;
+    }
+    footer{
+        height: 25px;
+        background-color: #1c1c1c;;
+        color: white;
+        span{
+            margin: auto;
+        }
+    }
+    header, footer{
+        display: flex;
+        justify-content: center;
+    }
+    .mat-divider{
+        margin: 50px auto;
+        border-top-width: 5px;
+        border-top-color: dimgray;
+    }
+}
