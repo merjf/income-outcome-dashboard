@@ -46,8 +46,15 @@ export class RecordsChartComponent implements OnInit {
       this.chartService.initLineChart([["Outcome", amazonOutcome]], "#amazonOutcomeChart", "Amazon Outcome", totAmazonExpenses,
       3, ["#e79924"]);
       let outcomePerType = this.data["outcomePerType"];
-      let labels = Object.keys(outcomePerType);
-      let values = Object.keys(outcomePerType).map(function (key) { return Math.abs(outcomePerType[key].toFixed(2)); });
+      let labels = Object.keys(outcomePerType).map(function (key) {
+        key = key.replace(/([a-z])([A-Z])/g, '$1 $2');
+        key = key.replace(" Costs", "");
+        key = key.replace(" Out", "");
+        return key[0].toUpperCase() + key.slice(1).toLowerCase();
+      });
+      let values = Object.keys(outcomePerType).map(function (key) {
+        return Math.abs(outcomePerType[key].toFixed(2));
+      });
       this.chartService.initPolarChart(values, "#outcomePerType", labels, 4, "Outcome Per Type");
     }
   }

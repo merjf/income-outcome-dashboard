@@ -84,6 +84,8 @@ export class ChartService {
           width: 1,
           colors: undefined
         },
+        colors:['#fff70d', '#8214cc', '#14cc42', '#0f43ff', '#ff0f17', '#ff7b0f',
+          '#36638a', '#613b1c', '#47abed', '#48cfb8', '#08731a'],
         yaxis: {
           show: false
         },
