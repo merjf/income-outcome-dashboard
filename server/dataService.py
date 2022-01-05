@@ -93,7 +93,7 @@ def extractOutcomePerType(dataFrame):
     clothesCosts = allOutcome[allOutcome['description'].str.contains("(?i)jones|north|decathlon|looker|scout|celio|coin|zalando|sarto|calzedonia", case=False)]["operation"].sum()
     gamesCosts = allOutcome[allOutcome['description'].str.contains("(?i)steam|league|riot", case=False)]["operation"].sum()
     vehicleCosts = allOutcome[allOutcome['description'].str.contains("(?i)crimi|pedaggio|assicurazione|pneumatici", case=False)]["operation"].sum()
-    cash = allOutcome[allOutcome['description'].str.contains("(?i)prelievo", case=False)]["operation"].sum()
+    #cash = allOutcome[allOutcome['description'].str.contains("(?i)prelievo", case=False)]["operation"].sum()
     findomestic = allOutcome[allOutcome['description'].str.contains("(?i)findomestic", case=False)]["operation"].sum()
     #ohterCosts = allOutcome[allOutcome['description'].str.contains("(?i)", case=False)]
     return json.dumps({
@@ -106,6 +106,6 @@ def extractOutcomePerType(dataFrame):
         'clothesCosts': clothesCosts,
         'gamesCosts': gamesCosts,
         'vehicleCosts': vehicleCosts,
-        'cash': cash,
+        #'cash': cash,
         'findomestic': findomestic
     })

@@ -18,16 +18,12 @@ export class ChartService {
       });
     });
     var optionsChart = {
+      series: series,
       chart: {
         type: "line",
         id: id,
         zoom: {
-          type: "x",
-          enabled: true,
-          autoScaleYaxis: true
-        },
-        toolbar: {
-          autoSelected: "zoom"
+          enabled: false
         }
       },
       title: {
@@ -38,7 +34,6 @@ export class ChartService {
         curve: 'straight'
       },
       colors: colors,
-      series: series,
       xaxis: {
         type: 'datetime'
       },
@@ -61,18 +56,135 @@ export class ChartService {
         }
       }
     }
-    var chartArea = new ApexCharts(
+    var lineChart = new ApexCharts(
       document.querySelector(chartId),
       optionsChart
     );
-    chartArea.render();
+    lineChart.render();
+  }
+
+  initDoubleLineChart(data: any[], chartId1: string, chartId2: string, title: string, id1: number, id2: number, colors: string[]){
+    var series: any = [];
+    data.forEach(item => {
+      series.push({
+        name: item[0],
+        data: item[1]
+      });
+    });
+    console.log(series[0]["data"]);
+    var optionsChart1 = {
+      series: [{
+        name: title,
+        data: series[0]["data"]
+      }],
+      chart: {
+        id: id2,
+        type: "line",
+        height: 230,
+        toolbar: {
+          autoSelected: "pan",
+          show: false
+        }
+      },
+      title: {
+        text: title,
+        align: "center"
+      },
+      colors: colors,
+      stroke: {
+        width: 3
+      },
+      dataLabels: {
+        enabled: false
+      },
+      fill: {
+        opacity: 1
+      },
+      yaxis: {
+        labels: {
+          formatter: function(val: any) {
+            return val.toFixed(2);
+          }
+        },
+        tickAmount: 2,
+        title: {
+          text: "Amount"
+        }
+      },
+      markers: {
+        size: 0
+      },
+      xaxis: {
+        type: "datetime"
+      }
+    };
+    var optionsChart2 = {
+      series: [{
+        name: title,
+        data: series[0]["data"]
+      }],
+      chart: {
+        id: id1,
+        height: 130,
+        type: "area",
+        brush: {
+          target: id2,
+          enabled: true
+        },
+        selection: {
+          enabled: true,
+          xaxis: {
+            min: new Date("1 Aug 2021").getTime(),
+            max: new Date("1 Dec 2021").getTime()
+          }
+        }
+      },
+      title: {
+        text: title,
+        align: "center"
+      },
+      colors: colors,
+      fill: {
+        type: "gradient",
+        gradient: {
+          opacityFrom: 0.91,
+          opacityTo: 0.1
+        }
+      },
+      xaxis: {
+        type: "datetime",
+        tooltip: {
+          enabled: false
+        }
+      },
+      yaxis: {
+        labels: {
+          formatter: function(val: any) {
+            return val.toFixed(2);
+          }
+        },
+        tickAmount: 2,
+        title: {
+          text: "Amount"
+        }
+      }
+    };
+    var chart1 = new ApexCharts(
+      document.querySelector(chartId1),
+      optionsChart1
+    );
+    chart1.render();
+    var chart2 = new ApexCharts(
+      document.querySelector(chartId2),
+      optionsChart2
+    );
+    chart2.render();
   }
 
   initPolarChart(data: any[], chartId: string, labels: string[], id: number, title: string){
     var optionsChart = {
       series: data,
         chart: {
-          width: 380,
           type: 'polarArea',
           id: id
         },
@@ -80,12 +192,15 @@ export class ChartService {
         fill: {
           opacity: 1
         },
-        stroke: {
-          width: 1,
-          colors: undefined
+        title: {
+          text: title,
+          align: "center"
         },
-        colors:['#fff70d', '#8214cc', '#14cc42', '#0f43ff', '#ff0f17', '#ff7b0f',
-          '#36638a', '#613b1c', '#47abed', '#48cfb8', '#08731a'],
+        stroke: {
+          colors: ["#FFF"]
+        },
+        colors:['#7eb5f9', '#8bf2f7', '#3dff87', '#eaff08', '#ffb133', '#ff3838',
+          '#be4dff', '#97ecbd', '#e48797', '#d39934'],
         yaxis: {
           show: false
         },
@@ -94,7 +209,8 @@ export class ChartService {
         },
         tooltip: {
           followCursor: true,
-          theme: localStorage.getItem("theme")
+          theme: localStorage.getItem("theme"),
+          color: "#FFF"
         },
         plotOptions: {
           polarArea: {
@@ -110,7 +226,64 @@ export class ChartService {
           }
         }
     };
-    console.log(document.querySelector(chartId));
+    var chartArea = new ApexCharts(
+      document.querySelector(chartId),
+      optionsChart
+    );
+    chartArea.render();
+  }
+
+  initPieChart(data: any[], chartId: string, labels: string[], id: number, title: string){
+    var optionsChart = {
+      series: data,
+      chart: {
+        type: 'pie',
+        id: id
+      },
+      labels: labels,
+      legend: {
+        position: 'right',
+        offsetY: 100
+      },
+      fill: {
+        opacity: 1
+      },
+      title: {
+        text: title,
+        align: "center"
+      },
+      stroke: {
+        colors: ["#FFF"]
+      },
+      colors:['#7eb5f9', '#8bf2f7', '#3dff87', '#eaff08', '#ffb133', '#ff3838',
+        '#be4dff', '#97ecbd', '#e48797', '#d39934'],
+      yaxis: {
+        show: false
+      },
+      tooltip: {
+        followCursor: true,
+        theme: localStorage.getItem("theme"),
+        color: "#FFF"
+      },
+      plotOptions: {
+        polarArea: {
+          rings: {
+            strokeWidth: 0
+          }
+        },
+        plotOptions: {
+          pie: {
+            expandOnClick: false
+          }
+        }
+      },
+      theme: {
+        monochrome: {
+          shadeTo: 'light',
+          shadeIntensity: 0.6
+        }
+      }
+    };
     var chartArea = new ApexCharts(
       document.querySelector(chartId),
       optionsChart

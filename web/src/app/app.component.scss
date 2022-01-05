@@ -12,8 +12,16 @@
         }
         .theme-mode{
             position: fixed;
-            right: 40px;
-            top: 40px;
+            right: 20px;
+            top: 20px;
+            border: solid 1px black;
+            border-radius: 5px;
+            z-index: 99;
+        }
+        .theme-mode:hover {
+            background-color: black;
+            color: white;
+            cursor: pointer;
         }
     }
     main {
@@ -50,5 +58,9 @@
     footer{
         background-color: white;
         color: #1c1c1c;
+    }
+    .theme-mode:hover {
+        background-color: white !important;
+        color: black !important;
     }
 }

@@ -45,6 +45,8 @@ export class RecordsChartComponent implements OnInit {
       2, ["#0d39d9"]);
       this.chartService.initLineChart([["Outcome", amazonOutcome]], "#amazonOutcomeChart", "Amazon Outcome", totAmazonExpenses,
       3, ["#e79924"]);
+      this.chartService.initDoubleLineChart([["Income", positiveAmounts], ["Outcome", negativeAmounts]], "#incomeOutcomeChart1",
+      "#incomeOutcomeChart2", "Year Income/Outcome", 1, 4, ["#0db824", "#fc0000"]);
       let outcomePerType = this.data["outcomePerType"];
       let labels = Object.keys(outcomePerType).map(function (key) {
         key = key.replace(/([a-z])([A-Z])/g, '$1 $2');
@@ -55,7 +57,7 @@ export class RecordsChartComponent implements OnInit {
       let values = Object.keys(outcomePerType).map(function (key) {
         return Math.abs(outcomePerType[key].toFixed(2));
       });
-      this.chartService.initPolarChart(values, "#outcomePerType", labels, 4, "Outcome Per Type");
+      this.chartService.initPieChart(values, "#outcomePerType", labels, 4, "Outcome Per Type");
     }
   }
 
