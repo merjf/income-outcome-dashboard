@@ -4,7 +4,7 @@ import numpy as np
 import json
 
 def loadData():
-    filedf = pd.read_csv('ListaMovimentiFM.csv', sep=';')
+    filedf = pd.read_csv('ListaMovimenti.csv', sep=';')
     dataFrame = pd.DataFrame()
     for index, row in filedf.iterrows():
         if pd.isnull(row[1]):
@@ -71,7 +71,7 @@ def getSalary(dataFrame):
 
 def extractSalary(dataFrame):
     salaries = dataFrame.loc[dataFrame['operation'] > 0].sort_values(by="valueDate")
-    salaries = salaries[salaries['description'].str.contains("NIVAURA|AGILE")]
+    salaries = salaries[salaries['description'].str.contains("NIVAURA|AGILE|FINCONS")]
     return salaries.drop('description', 1)
 
 def getAmazonExpenses(dataFrame):
@@ -85,7 +85,7 @@ def extractAmazonExpenses(dataFrame):
 def extractOutcomePerType(dataFrame):
     allOutcome = dataFrame.loc[dataFrame['operation'] < 0].sort_values(by="valueDate")
     multimediaCosts = allOutcome[allOutcome['description'].str.contains("(?i)spotify|netflix|disney|iliad|fastweb|wind|telecom", case=False)]["operation"].sum()
-    fixedCosts = allOutcome[allOutcome['description'].str.contains("(?i)picicuto|parking|nicita", case=False)]["operation"].sum()
+    fixedCosts = allOutcome[allOutcome['description'].str.contains("(?i)picicuto|profeta|parking|nicita", case=False)]["operation"].sum()
     gasolioCosts = allOutcome[allOutcome['description'].str.contains("(?i)esso|petrol|eni|stazione|distributore|tamoil", case=False)]["operation"].sum()
     marketCosts = allOutcome[allOutcome['description'].str.contains("(?i)conad|crai|mercat|kasanova|lidl|esselunga|iper|penny|auchan|deco|eurospin|linda|discount", case=False)]["operation"].sum()
     diningOut = allOutcome[allOutcome['description'].str.contains("(?i)scuderi|burger|borgo|canusciuti|tortellino|risto|food|gelsobianco|terrazza|trattori|spinella|panin", case=False)]["operation"].sum()
