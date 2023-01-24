@@ -20,14 +20,14 @@ def loadData():
 def getData():
     dataFrame = loadData()
     dataFrame = refineData(dataFrame)
-    collectMostPresentKeys(dataFrame)
-    # generalValues = extractGeneralValues(dataFrame.copy())
-    # weekAmounts = dataFrame['operation'].groupby(dataFrame['valueDate'].dt.to_period('W')).sum()
-    # yearIncomeOutcome = extractYearIncomeOutcome(dataFrame.copy())
-    # salaries = getSalary(dataFrame.copy())
-    # amazonExpenses = getAmazonExpenses(dataFrame.copy())
-    # outcomePerType = extractOutcomePerType(dataFrame.copy())
-    # return [generalValues, weekAmounts.to_json(orient='records'), yearIncomeOutcome, salaries, amazonExpenses, outcomePerType]
+    # collectMostPresentKeys(dataFrame)
+    generalValues = extractGeneralValues(dataFrame.copy())
+    weekAmounts = dataFrame['operation'].groupby(dataFrame['valueDate'].dt.to_period('W')).sum()
+    yearIncomeOutcome = extractYearIncomeOutcome(dataFrame.copy())
+    salaries = getSalary(dataFrame.copy())
+    amazonExpenses = getAmazonExpenses(dataFrame.copy())
+    outcomePerType = extractOutcomePerType(dataFrame.copy())
+    return [generalValues, weekAmounts.to_json(orient='records'), yearIncomeOutcome, salaries, amazonExpenses, outcomePerType]
 
 def refineData(dataFrame):
     return dataFrame[~dataFrame['description'].str.contains("GIROFONDO")]
