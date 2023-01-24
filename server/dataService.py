@@ -2,30 +2,32 @@ import pandas as pd
 from pandas.core.frame import DataFrame
 import numpy as np
 import json
+from collections import defaultdict
 
 def loadData():
-    filedf = pd.read_csv('ListaMovimenti.csv', sep=';')
+    filedf = pd.read_csv('./ListaMovimenti.csv', sep=';')
     dataFrame = pd.DataFrame()
     for index, row in filedf.iterrows():
         if pd.isnull(row[1]):
             operation = float(row[2].replace('.', '').replace(',', '.'))
         else:
             operation = -float(row[1].replace('.', '').replace(',', '.'))
-        newItem = { 'operation': operation, 'description': row[3], 'valueDate': row[0]}
-        dataFrame = dataFrame.append(newItem, ignore_index=True)
+        newItem = pd.DataFrame({'operation': operation, 'description': row[3], 'valueDate': row[0]}, index=[0])
+        dataFrame = pd.concat([dataFrame, newItem])
     dataFrame['valueDate'] = pd.to_datetime(dataFrame['valueDate'], format='%d/%m/%Y')
     return dataFrame
 
 def getData():
     dataFrame = loadData()
     dataFrame = refineData(dataFrame)
-    generalValues = extractGeneralValues(dataFrame.copy())
-    weekAmounts = dataFrame['operation'].groupby(dataFrame['valueDate'].dt.to_period('W')).sum()
-    yearIncomeOutcome = extractYearIncomeOutcome(dataFrame.copy())
-    salaries = getSalary(dataFrame.copy())
-    amazonExpenses = getAmazonExpenses(dataFrame.copy())
-    outcomePerType = extractOutcomePerType(dataFrame.copy())
-    return [generalValues, weekAmounts.to_json(orient='records'), yearIncomeOutcome, salaries, amazonExpenses, outcomePerType]
+    collectMostPresentKeys(dataFrame)
+    # generalValues = extractGeneralValues(dataFrame.copy())
+    # weekAmounts = dataFrame['operation'].groupby(dataFrame['valueDate'].dt.to_period('W')).sum()
+    # yearIncomeOutcome = extractYearIncomeOutcome(dataFrame.copy())
+    # salaries = getSalary(dataFrame.copy())
+    # amazonExpenses = getAmazonExpenses(dataFrame.copy())
+    # outcomePerType = extractOutcomePerType(dataFrame.copy())
+    # return [generalValues, weekAmounts.to_json(orient='records'), yearIncomeOutcome, salaries, amazonExpenses, outcomePerType]
 
 def refineData(dataFrame):
     return dataFrame[~dataFrame['description'].str.contains("GIROFONDO")]
@@ -109,3 +111,13 @@ def extractOutcomePerType(dataFrame):
         #'cash': cash,
         'findomestic': findomestic
     })
+
+def collectMostPresentKeys(dataFrame):
+    temp = defaultdict(int)
+    for sub in dataFrame['description']:
+        for wrd in sub.split():
+            temp[wrd] += 1
+    res = sorted(temp.items(), key=lambda x:x[1])[-20:]
+    print(res)
+
+getData()
